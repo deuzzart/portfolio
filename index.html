@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noai, noimageai">
     <link rel="preconnect" href="https://i.ibb.co">
-    <title>Deuz_z | Portfolio VisDev</title>
+    
+    <title>Deuz_z | Portfolio</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -18,26 +20,65 @@
 
         header { padding: 80px 20px 50px; }
         h1 { margin: 0; font-size: 3rem; letter-spacing: 3px; font-weight: 700; text-transform: uppercase; }
+        
+        /* ArtStation Link Style - Llamativo con color oficial */
+        .artstation-container {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .artstation-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            color: #ffffff;
+            /* Color azul oficial de ArtStation */
+            background-color: #13aff0; 
+            border-radius: 4px;
+            text-decoration: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+        .artstation-link:hover {
+            /* Un azul un poco más oscuro al pasar el ratón */
+            background-color: #0d8ec4; 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.5);
+        }
+        .artstation-link svg {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            fill: #ffffff; /* Logo blanco para contraste */
+        }
+
         h2 { margin: 15px 0 0; font-size: 1rem; font-weight: 300; color: #888; text-transform: uppercase; letter-spacing: 2px; }
 
+        /* Galería tipo Mosaico (Masonry) sin recortar imágenes y sin huecos negros horizontales */
         .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 15px;
-            padding: 20px;
             max-width: 1600px;
             margin: 0 auto;
+            padding: 20px;
+            column-count: 3; /* Número de columnas en PC */
+            column-gap: 15px; /* Espacio entre columnas */
         }
         .gallery img {
             width: 100%;
             height: auto;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
+            display: block;
+            margin-bottom: 15px; /* Espacio vertical exacto entre imágenes */
             border-radius: 2px;
             cursor: zoom-in;
             transition: opacity 0.3s ease;
             background-color: #1a1a1a;
             image-rendering: crisp-edges;
+            /* Evita que una imagen se corte a la mitad al final de una columna */
+            break-inside: avoid-column; 
         }
         .gallery img:hover { opacity: 0.7; }
 
@@ -48,7 +89,7 @@
             background: rgba(0, 0, 0, 0.98);
             display: none; justify-content: center; align-items: center;
             z-index: 1000;
-            overflow: hidden; /* Importante para el paneo */
+            overflow: hidden;
         }
 
         /* Ventana interna (Viewport) que contiene la imagen */
@@ -59,28 +100,22 @@
         }
         
         #lightbox-img {
-            /* Estado inicial: Encaja en la pantalla */
             max-width: 90%; max-height: 90vh;
             object-fit: contain;
             user-select: none;
-            cursor: zoom-in; /* Cursor de lupa inicial */
-            
-            /* Transición suave para scale, pero INSTANTÁNEA para translate al panear */
+            cursor: zoom-in;
             transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
-            
-            /* Punto de transformación central */
             transform-origin: center center;
-            will-change: transform; /* Optimización */
+            will-change: transform;
         }
 
-        /* Estilo para cuando la imagen está en zoom profundo (paneable) */
         #lightbox-img.panning {
-            cursor: grab; /* Mano abierta para 'agarrar' */
-            transition: transform 0.1s ease; /* Transición rápida para que siga el ratón */
+            cursor: grab;
+            transition: transform 0.1s ease;
         }
 
         #lightbox-img.grabbing {
-            cursor: grabbing !important; /* Mano cerrada al arrastrar */
+            cursor: grabbing !important;
         }
 
         .nav-arrow {
@@ -94,12 +129,17 @@
         #next { right: 0; }
 
         footer { padding: 80px 20px; font-size: 0.9rem; }
-        a { color: #fff; text-decoration: none; border-bottom: 1px solid #333; transition: 0.3s; }
+        footer p { margin: 10px 0; color: #666; }
+        a { color: #fff; text-decoration: none; border-bottom: 1px solid #333; padding-bottom: 2px; transition: 0.3s; }
         a:hover { border-color: #fff; }
 
+        @media (max-width: 1000px) {
+            .gallery { column-count: 2; }
+        }
         @media (max-width: 600px) {
             h1 { font-size: 2rem; }
-            .gallery { grid-template-columns: 1fr; }
+            .gallery { column-count: 1; column-gap: 0; }
+            .nav-arrow { padding: 20px; font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -107,7 +147,17 @@
 
     <header>
         <h1>Deuz_z</h1>
-        <h2>Artista Digital VisDev Junior</h2>
+        
+        <div class="artstation-container">
+            <a href="https://www.artstation.com/deuz_z" target="_blank" class="artstation-link">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 17.723l2.027-3.505h2.463L.263 21.458zm24 0L13.784 0h-4.08l4.49 7.766h4.555l-3.321 5.753zM10.23 11.218l-2.021 3.5h9.06l2.026-3.5zM8.203 14.718L4.148 21.742h16.195l-4.053-7.024z"/>
+                </svg>
+                ArtStation
+            </a>
+        </div>
+        
+        <h2>VisDev Artist & Technical Artist Junior</h2>
     </header>
 
     <main class="gallery" id="gallery-container"></main>
@@ -147,12 +197,10 @@
         const gallery = document.getElementById('gallery-container');
         let currentIndex = 0;
 
-        // Variables de estado del Zoom y Paneo
         let scale = 1;
         let panning = false;
         let pointX = 0, pointY = 0, startX = 0, startY = 0;
         const defaultScale = 1;
-        // Escala automática al tamaño del lienzo (puedes ajustar este valor, ej: 2.5)
         const zoomedScale = 2.5; 
 
         imgUrls.forEach((url, index) => {
@@ -171,16 +219,15 @@
         function openLightbox(index) {
             currentIndex = index;
             lightboxImg.src = imgUrls[currentIndex];
-            resetZoom(); // Reset estado inicial
+            resetZoom();
             lightbox.style.display = 'flex';
         }
 
         function changeImg(event, direction) {
             if(event) event.stopPropagation();
             currentIndex = (currentIndex + direction + imgUrls.length) % imgUrls.length;
-            
             lightboxImg.src = imgUrls[currentIndex];
-            resetZoom(); // Importante: Resetear zoom al cambiar de foto
+            resetZoom();
         }
 
         function closeLightbox() { 
@@ -188,25 +235,20 @@
             resetZoom();
         }
 
-        // Cierra el visor si se hace clic fuera de la imagen
         function closeLightboxOutside(event) {
             if (event.target === lightboxViewport && scale === 1) {
                 closeLightbox();
             }
         }
 
-        // Función principal para activar/desactivar Zoom profundo
         function toggleZoom(event) {
-            event.stopPropagation(); // No cierra el lightbox al clickear la imagen
-
+            event.stopPropagation();
             if (scale === 1) {
-                // ACTIVAR ZOOM PROFUNDO (Paneable)
                 scale = zoomedScale;
                 lightboxImg.classList.add('panning');
-                lightboxImg.style.transition = 'transform 0.3s ease'; // Transición suave al escalar
-                updateTransform(0, 0); // Empieza centrado
+                lightboxImg.style.transition = 'transform 0.3s ease';
+                updateTransform(0, 0);
             } else {
-                // DESACTIVAR ZOOM PROFUNDO
                 resetZoom();
             }
         }
@@ -215,34 +257,22 @@
             scale = 1;
             pointX = 0; pointY = 0; startX = 0; startY = 0;
             lightboxImg.classList.remove('panning', 'grabbing');
-            // Transición suave al volver al tamaño normal
             lightboxImg.style.transition = 'transform 0.3s ease'; 
             updateTransform(0, 0);
             lightboxImg.style.cursor = 'zoom-in';
         }
 
-        // Función para aplicar la transformación (scale + translate)
         function updateTransform(x = pointX, y = pointY) {
-            // Se calcula aquí para asegurar la respuesta rápida al arrastrar
-            // scale(1) translate(0,0) inicial
-            // scale(2.5) translate(X,Y) al panear
             lightboxImg.style.transform = `scale(${scale}) translate(${x}px, ${y}px)`;
         }
 
-        // --- LÓGICA DE ARRASTRE (MOUSE PANNING) ---
-
         lightboxImg.onmousedown = function (e) {
-            if (scale === 1) return; // Solo arrastrar si hay zoom
-            e.preventDefault(); // Evita arrastre nativo de imagen
-            
+            if (scale === 1) return;
+            e.preventDefault();
             panning = true;
             lightboxImg.classList.add('grabbing');
-            
-            // Calculamos la posición relativa del ratón respecto a la imagen paneada
             startX = e.clientX - pointX * scale; 
             startY = e.clientY - pointY * scale;
-            
-            // Desactivamos transición durante el arrastre para respuesta instantánea
             lightboxImg.style.transition = 'none'; 
         };
 
@@ -250,40 +280,32 @@
             if (!panning || scale === 1) return;
             e.preventDefault();
 
-            // Calculamos nueva posición tentativa
             let newX = (e.clientX - startX) / scale;
             let newY = (e.clientY - startY) / scale;
 
-            // CALCULAMOS LÍMITES DE PANEO (Crucial para ver toda la imagen)
             const imgRect = lightboxImg.getBoundingClientRect();
             const viewRect = lightboxViewport.getBoundingClientRect();
 
-            // Tamaño visual real de la imagen escalada
             const visualWidth = imgRect.width;
             const visualHeight = imgRect.height;
 
-            // Paneo máximo horizontal (maxX) y vertical (maxY) permitido
-            // Se basa en la diferencia entre el tamaño escalado y el viewport
             const maxX = Math.max(0, (visualWidth - viewRect.width) / 2 / scale);
             const maxY = Math.max(0, (visualHeight - viewRect.height) / 2 / scale);
 
-            // APLICAMOS LÍMITES: pointX y pointY nunca superan maxX y maxY
             pointX = Math.max(-maxX, Math.min(maxX, newX));
             pointY = Math.max(-maxY, Math.min(maxY, newY));
 
-            updateTransform(); // Actualizamos la imagen
+            updateTransform();
         };
 
         window.onmouseup = function () {
             panning = false;
             if (scale !== 1) {
                 lightboxImg.classList.remove('grabbing');
-                // Reactivamos transición para cuando se suelta y ajusta la posición
                 lightboxImg.style.transition = 'transform 0.1s ease'; 
             }
         };
 
-        // Teclado
         document.addEventListener('keydown', (e) => {
             if (lightbox.style.display === 'flex') {
                 if (e.key === 'ArrowRight') changeImg(null, 1);
